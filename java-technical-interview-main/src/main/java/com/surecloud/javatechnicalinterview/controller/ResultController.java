@@ -1,8 +1,6 @@
 package com.surecloud.javatechnicalinterview.controller;
 
-import com.surecloud.javatechnicalinterview.mapper.ResultMapper;
 import com.surecloud.javatechnicalinterview.model.ResultResponse;
-import com.surecloud.javatechnicalinterview.repository.ResultRepository;
 import com.surecloud.javatechnicalinterview.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
