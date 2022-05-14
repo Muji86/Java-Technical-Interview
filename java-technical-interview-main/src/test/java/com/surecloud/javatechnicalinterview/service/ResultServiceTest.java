@@ -37,7 +37,7 @@ class ResultServiceTest {
                 SCORE,
                 DATE
         );
-        List<ResultEntity> entities = Arrays.asList(entity);
+        List<ResultEntity> entities = List.of(entity);
         given(resultRepository.findAll()).willReturn(entities);
 
         //when

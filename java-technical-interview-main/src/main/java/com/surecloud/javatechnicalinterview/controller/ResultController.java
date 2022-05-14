@@ -1,11 +1,10 @@
 package com.surecloud.javatechnicalinterview.controller;
 
+import com.surecloud.javatechnicalinterview.model.ResultRequest;
 import com.surecloud.javatechnicalinterview.model.ResultResponse;
 import com.surecloud.javatechnicalinterview.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +25,10 @@ public class ResultController {
     @GetMapping("/results/{id}")
     public ResultResponse getResultById(@PathVariable String id) throws Exception {
         return resultService.getResultById(id);
+    }
+
+    @PostMapping("/results")
+    public ResultResponse createResult(@RequestBody ResultRequest request) {
+        return resultService.createResult(request);
     }
 }
