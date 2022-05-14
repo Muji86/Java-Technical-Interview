@@ -6,17 +6,19 @@ import com.surecloud.javatechnicalinterview.repository.ResultRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class ResultServiceTest {
 
     private static final String ENTITY_NAME = "entityname";
     private static final int SCORE = 200;
-    private static final Date DATE = new Date();
+    private static final LocalDate DATE = LocalDate.now();
     private ResultService testCandidate;
     private ResultRepository resultRepository;
 
@@ -42,6 +44,7 @@ class ResultServiceTest {
         List<ResultResponse> result = testCandidate.getAllResults();
 
         //then
+        verify(resultRepository).findAll();
         assertThat(result.isEmpty()).isFalse();
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getName()).isEqualTo(ENTITY_NAME);
@@ -59,6 +62,7 @@ class ResultServiceTest {
         List<ResultResponse> result = testCandidate.getAllResults();
 
         //then
+        verify(resultRepository).findAll();
         assertThat(result.isEmpty()).isTrue();
 
     }

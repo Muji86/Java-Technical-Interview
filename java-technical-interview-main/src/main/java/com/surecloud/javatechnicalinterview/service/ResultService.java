@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,5 +26,13 @@ public class ResultService {
                 .stream() //
                 .map(ResultMapper::mapEntityToResult) //
                 .collect(Collectors.toList());
+    }
+
+    //TODO: Find alternative instead of throwing exception
+    public ResultResponse getResultById(String id) throws Exception {
+        return resultRepository
+                .findById(UUID.fromString(id))
+                .map(ResultMapper::mapEntityToResult)
+                .orElseThrow(() -> new Exception("Result not found!"));
     }
 }

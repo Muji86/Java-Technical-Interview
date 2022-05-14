@@ -1,11 +1,10 @@
 package com.surecloud.javatechnicalinterview.repository;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -17,10 +16,10 @@ public class ResultEntity {
     private UUID id;
     private String name;
     private int score;
-    @Temporal(TemporalType.DATE)
-    private Date date_taken;
+    @Column(name = "date_taken", columnDefinition = "DATE")
+    private LocalDate date_taken;
 
-    public ResultEntity(UUID id, String name, int score, Date date_taken) {
+    public ResultEntity(UUID id, String name, int score, LocalDate date_taken) {
         this.id = id;
         this.name = name;
         this.score = score;
