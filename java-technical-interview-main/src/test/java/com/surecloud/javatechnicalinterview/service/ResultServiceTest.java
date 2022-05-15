@@ -1,5 +1,6 @@
 package com.surecloud.javatechnicalinterview.service;
 
+import com.surecloud.javatechnicalinterview.model.ResultRequest;
 import com.surecloud.javatechnicalinterview.model.ResultResponse;
 import com.surecloud.javatechnicalinterview.repository.ResultEntity;
 import com.surecloud.javatechnicalinterview.repository.ResultRepository;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 class ResultServiceTest {
 
-    private static final String ENTITY_NAME = "entityname";
+    private static final String NAME = "aName";
     private static final int SCORE = 200;
     private static final LocalDate DATE = LocalDate.now();
     private static final UUID ID = UUID.randomUUID();
@@ -36,7 +37,7 @@ class ResultServiceTest {
         //given
         ResultEntity entity = new ResultEntity(
                 ID,
-                ENTITY_NAME,
+                NAME,
                 SCORE,
                 DATE
         );
@@ -48,9 +49,10 @@ class ResultServiceTest {
 
         //then
         verify(resultRepository).findAll();
+        assertThat(result).isNotNull();
         assertThat(result.isEmpty()).isFalse();
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getName()).isEqualTo(ENTITY_NAME);
+        assertThat(result.get(0).getName()).isEqualTo(NAME);
         assertThat(result.get(0).getScore()).isEqualTo(SCORE);
         assertThat(result.get(0).getDate_taken()).isEqualTo(DATE);
     }
@@ -66,6 +68,7 @@ class ResultServiceTest {
 
         //then
         verify(resultRepository).findAll();
+        assertThat(result).isNotNull();
         assertThat(result.isEmpty()).isTrue();
 
     }
@@ -75,7 +78,7 @@ class ResultServiceTest {
         //given
         Optional<ResultEntity> entity = Optional.of(new ResultEntity(
                 ID,
-                ENTITY_NAME,
+                NAME,
                 SCORE,
                 DATE
         ));
@@ -88,10 +91,11 @@ class ResultServiceTest {
 
         //then
         verify(resultRepository).findById(ID);
+        assertThat(result).isNotNull();
         assertThat(result.getStatusCode()).isEqualTo(statusCodeOk);
         ResultResponse resultBody = result.getBody();
         assertThat(resultBody).isNotNull();
-        assertThat(resultBody.getName()).isEqualTo(ENTITY_NAME);
+        assertThat(resultBody.getName()).isEqualTo(NAME);
         assertThat(resultBody.getScore()).isEqualTo(SCORE);
         assertThat(resultBody.getDate_taken()).isEqualTo(DATE);
     }
@@ -108,6 +112,7 @@ class ResultServiceTest {
         ResponseEntity<ResultResponse> result = testCandidate.getResultById(INVALID_ID);
 
         //then
+        assertThat(result).isNotNull();
         assertThat(result.getStatusCode()).isEqualTo(statusCodeNotFound);
 
     }
@@ -128,8 +133,43 @@ class ResultServiceTest {
 
         //then
         verify(resultRepository).findById(ID);
+        assertThat(result).isNotNull();
         assertThat(result.getStatusCode()).isEqualTo(statusCodeNotFound);
 
+    }
+
+    @Test
+    public void testThatCreateResultWithValidRequestReturnResponse() {
+        //given
+        ResultRequest request = new ResultRequest(
+                NAME,
+                SCORE
+        );
+
+        ResultEntity entity = new ResultEntity(
+                ID,
+                NAME,
+                SCORE,
+                DATE
+        );
+
+        HttpStatus statusCodeCreated = HttpStatus.valueOf(201);
+
+
+        given(resultRepository.save(any())).willReturn(entity);
+
+        //when
+        ResponseEntity<ResultResponse> result = testCandidate.createResult(request);
+
+        //then
+        verify(resultRepository).save(any());
+        assertThat(result).isNotNull();
+        assertThat(result.getStatusCode()).isEqualTo(statusCodeCreated);
+        ResultResponse resultBody = result.getBody();
+        assertThat(resultBody).isNotNull();
+        assertThat(resultBody.getName()).isEqualTo(NAME);
+        assertThat(resultBody.getScore()).isEqualTo(SCORE);
+        assertThat(resultBody.getDate_taken()).isEqualTo(DATE);
     }
 
 }

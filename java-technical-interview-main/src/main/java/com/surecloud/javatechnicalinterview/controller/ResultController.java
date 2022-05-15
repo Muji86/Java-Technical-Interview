@@ -29,7 +29,7 @@ public class ResultController {
     }
 
     @PostMapping("/results")
-    public ResultResponse createResult(@RequestBody ResultRequest request) {
+    public ResponseEntity<ResultResponse> createResult(@RequestBody ResultRequest request) {
         return resultService.createResult(request);
     }
 }

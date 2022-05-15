@@ -7,6 +7,7 @@ import com.surecloud.javatechnicalinterview.repository.ResultEntity;
 import com.surecloud.javatechnicalinterview.repository.ResultRepository;
 import com.surecloud.javatechnicalinterview.validations.UUIDValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class ResultService {
 
     //TODO: How to ensure that UUID is unique?
     // Theoretically, it can already occur in the table...
-    public ResultResponse createResult(ResultRequest request) {
+    public ResponseEntity<ResultResponse> createResult(ResultRequest request) {
         ResultEntity entity = new ResultEntity(
                 UUID.randomUUID(),
                 request.getName(),
@@ -59,6 +60,6 @@ public class ResultService {
                 LocalDate.now()
         );
         ResultEntity savedEntity = resultRepository.save(entity);
-        return mapEntityToResult(savedEntity);
+        return new ResponseEntity<>(mapEntityToResult(savedEntity), HttpStatus.CREATED);
     }
 }
