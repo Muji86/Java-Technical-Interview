@@ -5,7 +5,7 @@ import com.surecloud.javatechnicalinterview.model.ResultRequest;
 import com.surecloud.javatechnicalinterview.model.ResultResponse;
 import com.surecloud.javatechnicalinterview.repository.ResultEntity;
 import com.surecloud.javatechnicalinterview.repository.ResultRepository;
-import com.surecloud.javatechnicalinterview.validations.ResultValidation;
+import com.surecloud.javatechnicalinterview.validations.UUIDValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class ResultService {
     //or if it's just not present in the database.
     // Alternative????
     public ResponseEntity<ResultResponse> getResultById(String id) {
-        return ResultValidation.isUUID(id)
+        return UUIDValidation.isUUID(id)
                 ? resultRepository
                     .findById(UUID.fromString(id))
                     .map(ResultMapper::mapEntityToResult)
