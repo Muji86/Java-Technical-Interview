@@ -5,7 +5,9 @@ import com.surecloud.javatechnicalinterview.model.ResultRequest;
 import com.surecloud.javatechnicalinterview.model.ResultResponse;
 import com.surecloud.javatechnicalinterview.repository.ResultEntity;
 import com.surecloud.javatechnicalinterview.repository.ResultRepository;
+import com.surecloud.javatechnicalinterview.validations.ResultValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,15 +35,22 @@ public class ResultService {
                 .collect(Collectors.toList());
     }
 
-    //TODO: Find alternative instead of throwing exception
-    public ResultResponse getResultById(String id) throws Exception {
-        return resultRepository
-                .findById(UUID.fromString(id))
-                .map(ResultMapper::mapEntityToResult)
-                .orElseThrow(() -> new Exception("Result not found!"));
+    //TODO: Not clear if there is for example only a typo in the UUID
+    //or if it's just not present in the database.
+    // Alternative????
+    public ResponseEntity<ResultResponse> getResultById(String id) {
+        return ResultValidation.isUUID(id)
+                ? resultRepository
+                    .findById(UUID.fromString(id))
+                    .map(ResultMapper::mapEntityToResult)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build())
+                : ResponseEntity.notFound().build();
     }
 
-    //TODO: How to ensure that UUID is unique? Theoretically, it can already occur in the table...
+
+    //TODO: How to ensure that UUID is unique?
+    // Theoretically, it can already occur in the table...
     public ResultResponse createResult(ResultRequest request) {
         ResultEntity entity = new ResultEntity(
                 UUID.randomUUID(),

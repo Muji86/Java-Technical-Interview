@@ -4,6 +4,7 @@ import com.surecloud.javatechnicalinterview.model.ResultRequest;
 import com.surecloud.javatechnicalinterview.model.ResultResponse;
 import com.surecloud.javatechnicalinterview.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class ResultController {
     }
 
     @GetMapping("/results/{id}")
-    public ResultResponse getResultById(@PathVariable String id) throws Exception {
+    public ResponseEntity<ResultResponse> getResultById(@PathVariable String id)  {
         return resultService.getResultById(id);
     }
 
